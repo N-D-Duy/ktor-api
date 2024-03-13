@@ -1,0 +1,68 @@
+[versions]
+ktor = "2.3.9"
+kotlin = "1.9.23"
+exposed = "0.48.0"
+hikaricp = "5.0.1"
+mysqlConnector = "8.0.28"
+koin = "3.5.0"
+logback = "1.4.14"
+kotlinLogging = "4.0.0-beta-2"
+springOrm = "6.1.4"
+
+
+
+[libraries]
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin"}
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin"}
+
+kotlinLogging = { module = "io.github.microutils:kotlin-logging-jvm", version.ref = "kotlinLogging" }
+mysqlConnector = { module = "mysql:mysql-connector-java", version.ref = "mysqlConnector" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+springOrm = { module = "org.springframework:spring-orm", version.ref = "springOrm" }
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
+
+ktor = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-serialization = { module = "io.ktor:ktor-serialization", version.ref = "ktor" }
+ktor-server = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
+ktor-server-host-common = { module = "io.ktor:ktor-server-host-common", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
+
+exposed = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
+
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+ktor-server-tests = { module = "io.ktor:ktor-server-tests", version.ref = "ktor" }
+
+[plugins]
+jvmPlugin = { id = "org.jetbrains.kotlin.jvm", version = "kotlin" }
+ktorPlugin = { id = "io.ktor", version = "ktor" }
+kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version = "kotlin" }
+
+
+[bundles]
+db = [ "exposed", "exposed-dao", "exposed-jdbc", "exposed-java-time", "mysqlConnector", "hikaricp" ]
+koin = [ "koin-core", "koin-ktor" ]
+ktor = [
+    "ktor",
+    "ktor-serialization",
+    "ktor-server",
+    "ktor-server-core",
+    "ktor-server-content-negotiation",
+    "ktor-server-call-logging",
+    "ktor-server-host-common",
+    "ktor-serialization-kotlinx-json",
+    "ktor-server-core-jvm"
+]
+logging = [ "kotlinLogging", "logback" ]
+testing = [
+    "kotlin-test-junit",
+    "ktor-server-tests"
+]
+
+
