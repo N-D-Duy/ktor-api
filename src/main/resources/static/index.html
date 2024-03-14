@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1> Ktor </h1>
+
+<form id="imageForm">
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+        <label for="url">URL:</label>
+        <input type="url" id="url" name="url" required>
+    </div>
+    <div>
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description">
+    </div>
+    <button type="submit" onclick="addImage()">Submit</button>
+</form>
+
+<script>
+    function addImage(){
+        const name = document.getElementById('name').value;
+        const url = document.getElementById('url').value;
+        const description = document.getElementById('description').value;
+        const data = {
+            name: name,
+            url: url,
+            description: description
+        };
+        fetch('/add-image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+    }
+
+
+</script>
+
+<!--<button onclick="fetchRandomImage()">Click me</button>-->
+
+<!--<script>
+    // Hàm fetchRandomImage được gọi khi nhấp vào nút
+    function fetchRandomImage() {
+        /*// Gửi yêu cầu GET đến /random-image
+        window.location.href = "/random-image";*/
+        fetch('/random-image')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // Tạo một thẻ img mới
+                const img = document.createElement('img');
+                // Đặt thuộc tính src của thẻ img mới tạo thành URL của hình ảnh ngẫu nhiên
+                img.src = data.image.url;
+                img.alt = data.image.description;
+                console.log(img.src)
+                // Thêm thẻ img mới tạo vào thẻ body
+                document.body.appendChild(img);
+            });
+    }
+</script>-->
+</body>
+</html>

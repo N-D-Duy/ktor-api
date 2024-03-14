@@ -5,6 +5,7 @@ import com.example.dto.ImageResponse
 import com.example.orm.ImageEntity
 import com.example.orm.ImageEntity.description
 import com.example.utils.database.DbTransaction
+import com.example.utils.functions.urlConverter
 import com.example.utils.resultOf
 import org.jetbrains.exposed.sql.insertIgnoreAndGetId
 import org.jetbrains.exposed.sql.selectAll
@@ -13,7 +14,7 @@ interface ImageRepository {
     suspend fun getRandomImage(): Result<ImageResponse?>
     suspend fun getImages(): Result<List<ImageResponse>>
     suspend fun getImage(name: String): Result<ImageResponse?>
-    suspend fun addImage(name: String, url: String, description: String): Result<ImageResponse?>
+    suspend fun addImage(image: Image): Result<ImageResponse?>
     suspend fun deleteImage(name: String): Result<ImageResponse?>
     suspend fun updateImage(name: String, url: String, description: String): Result<String>
 }
@@ -28,11 +29,9 @@ class ImageRepositoryImpl(
                 image?.let {
                     ImageResponse(
                         id = it[ImageEntity.id].value,
-                        image = Image(
-                            name = it[ImageEntity.name],
-                            url = it[ImageEntity.url],
-                            description = it[description]
-                        )
+                        name = it[ImageEntity.name],
+                        url = it[ImageEntity.url],
+                        description = it[description]
                     )
                 }
             }
@@ -45,11 +44,9 @@ class ImageRepositoryImpl(
                 ImageEntity.selectAll().map {
                     ImageResponse(
                         id = it[ImageEntity.id].value,
-                        image = Image(
-                            name = it[ImageEntity.name],
-                            url = it[ImageEntity.url],
-                            description = it[description]
-                        )
+                        name = it[ImageEntity.name],
+                        url = it[ImageEntity.url],
+                        description = it[description]
                     )
                 }
             }
@@ -62,34 +59,30 @@ class ImageRepositoryImpl(
                 val image = ImageEntity.selectAll().map {
                     ImageResponse(
                         id = it[ImageEntity.id].value,
-                        image = Image(
-                            name = it[ImageEntity.name],
-                            url = it[ImageEntity.url],
-                            description = it[description]
-                        )
+                        name = it[ImageEntity.name],
+                        url = it[ImageEntity.url],
+                        description = it[description]
                     )
-                }.firstOrNull { it.image.name == name }
+                }.firstOrNull { it.name == name }
                 image
             }
         }
     }
 
-    override suspend fun addImage(name: String, url: String, description: String): Result<ImageResponse?> {
+    override suspend fun addImage(image: Image): Result<ImageResponse?> {
         return dbTransaction.dbQuery {
             resultOf {
                 val id = ImageEntity.insertIgnoreAndGetId {
-                    it[ImageEntity.name] = name
-                    it[ImageEntity.url] = url
-                    it[ImageEntity.description] = description
+                    it[name] = image.name
+                    it[url] = urlConverter(image.name)
+                    it[description] = image.description
                 }
                 id?.let {
                     ImageResponse(
-                        id = it.value,
-                        image = Image(
-                            name = name,
-                            url = url,
-                            description = description
-                        )
+                        id = id.value,
+                        name = image.name,
+                        url = urlConverter(image.name),
+                        description = image.description
                     )
                 }
             }
